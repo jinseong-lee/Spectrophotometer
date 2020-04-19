@@ -55,9 +55,9 @@ int pin_led_g = 21;
 int pin_led_b = 22;
 
 //sensor
-int pin_3_3V = 38;
+
 int pin_cell_read2 = 38; // pin to read a light sensor
-int pin_GND = 35;//
+
 
 
 // valve pins
@@ -74,8 +74,6 @@ int mode= 0;
 
 char state;// procedure state
 bool automanual; //0: manual, 1: auto,
-
-int valve1,valve2,valve3; //read valve on/off state
 
 float data_arr[1000] = {0.0}; // store sample data
 float data_avg = 0.0;
@@ -119,22 +117,16 @@ void setup()
   pinMode(valve_drain_water, OUTPUT);
 
   pinMode(led, OUTPUT);
-  pinMode(pin_led_r, OUTPUT);
-
   pinMode(pin_led_g, OUTPUT);
   pinMode(pin_led_r, OUTPUT);
   pinMode(pin_led_b, OUTPUT);
 
-  pinMode(pin_3_3V, OUTPUT);
+  
   pinMode(pin_cell_read2, INPUT);
-  pinMode(pin_GND, OUTPUT);
-
+  
   digitalWrite(valve_algae_water, CLOSE);
   digitalWrite(valve_clean_water, CLOSE);
   digitalWrite(valve_drain_water, CLOSE);
-
-  digitalWrite(pin_3_3V, HIGH);
-  digitalWrite(pin_GND, LOW);
 
   mySerial.begin(9600);
   mySerial.println("Hello, world?");
@@ -376,7 +368,7 @@ valvestate valve_sequence(bool automanual, int valst){// sampling
       valst = valst +1;
       digitalWrite(pin_led_r, mode % 2);   // turn the LED on (HIGH is the voltage level)
 
-      delay(valve_hold_time);
+      delay(valve_hold_time*2); // to pull upto date algae stream
       valst = SAMPLE;
 
       if(automanual == 0)
